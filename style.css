@@ -284,3 +284,61 @@ button:disabled, .btn-entregado {
     transform: none !important;
     box-shadow: none !important;
 }
+
+/* ================================================================= */
+/* --- ¡NUEVO! ESTILOS PARA EL PANEL DE ADMINISTRACIÓN DE USUARIOS --- */
+/* ================================================================= */
+.user-card {
+    background-color: #fff;
+    border: 1px solid var(--color-borde-suave);
+    border-left: 5px solid #888; /* Un color neutro para la administración */
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Para que se ajuste en pantallas pequeñas */
+}
+
+.user-card-info p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.user-card-info p strong {
+    color: var(--color-texto-principal);
+}
+
+.user-card-actions {
+    display: flex;
+    flex-direction: column; /* Botones uno encima del otro */
+    gap: 8px; /* Espacio entre los botones */
+    margin-left: 15px;
+}
+
+.user-card-actions button {
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    min-width: 150px; /* Ancho mínimo para consistencia */
+}
+
+.btn-cambiar-rol {
+    background-color: var(--color-primario-azul);
+}
+.btn-cambiar-rol:hover {
+    background-color: #004494;
+}
+
+.btn-cambiar-estado {
+    background-color: var(--color-exito);
+}
+.btn-cambiar-estado:hover {
+    background-color: #229954;
+}
