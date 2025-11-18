@@ -1,0 +1,61 @@
+@startuml
+title Flujo Completo del Ciclo de Vida de un Envío
+
+actor Cliente
+participant "Interfaz Cliente" as WebCliente
+participant "Sistema (Backend)" as Backend
+participant "Interfaz Operador" as WebOperador
+actor Operador
+participant "Interfaz Repartidor" as WebRepartidor
+actor Repartidor
+
+== Solicitud del Envío ==
+Cliente -> WebCliente: Llena formulario de envío
+activate WebCliente
+WebCliente -> Backend: solicitarEnvio(datos)
+activate Backend
+Backend -> Backend: crearEnvio("Solicitado")
+Backend --> WebCliente: confirmacion(idEnvio)
+deactivate Backend
+WebCliente --> Cliente: Muestra "¡Solicitud Recibida!"
+deactivate WebCliente
+
+... El sistema notifica al Operador ...
+
+== Asignación del Envío ==
+Operador -> WebOperador: Visualiza envíos pendientes
+activate WebOperador
+WebOperador -> Backend: getEnvios("Solicitado")
+activate Backend
+Backend --> WebOperador: listaDeEnvios
+deactivate Backend
+Operador -> WebOperador: Asigna envío a un repartidor
+WebOperador -> Backend: asignarEnvio(idEnvio, idRepartidor)
+activate Backend
+Backend -> Backend: updateEnvio("Asignado")
+Backend --> WebOperador: confirmacionAsignacion
+deactivate Backend
+deactivate WebOperador
+
+... El sistema notifica al Repartidor ...
+
+== Entrega del Envío ==
+Repartidor -> WebRepartidor: Ve su lista de tareas
+activate WebRepartidor
+WebRepartidor -> Backend: getMisEnvios("Asignado")
+activate Backend
+Backend --> WebRepartidor: listaDeTareas
+deactivate Backend
+Repartidor -> WebRepartidor: Marca "Paquete Recogido"
+WebRepartidor -> Backend: actualizarEstado(idEnvio, "En Camino")
+activate Backend
+Backend -> Backend: updateEnvio("En Camino")
+deactivate Backend
+... más tarde ...
+Repartidor -> WebRepartidor: Marca "Entrega Completada"
+WebRepartidor -> Backend: actualizarEstado(idEnvio, "Entregado")
+activate Backend
+Backend -> Backend: updateEnvio("Entregado")
+deactivate Backend
+deactivate WebRepartidor
+@enduml

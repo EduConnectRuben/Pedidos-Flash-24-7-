@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash 24/7 - Panel de Operador</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="auth-guard.js" type="module"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="/images/flash.png" alt="Logo Flash 24/7" class="logo">
+            <h1>Panel de Control de Envíos</h1>
+            <p><strong>Operador:</strong> <span id="nombre-operador">Cargando...</span></p>
+            <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
+        </header>
+        <main>
+            <section id="envios-solicitados">
+                <h2>Envíos Solicitados</h2>
+                <div id="lista-solicitados">
+                    <p>Cargando envíos...</p>
+                </div>
+            </section>
+            <section id="repartidores-disponibles" style="margin-top: 30px;">
+                <h2>Repartidores Disponibles</h2>
+                <div id="lista-repartidores">
+                    <p>Cargando repartidores...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div id="modal-asignacion" class="modal-background hidden">
+        <div class="modal-content">
+            <h3>Asignar Envío</h3>
+            <p><strong>ID del Envío:</strong> <span id="modal-envio-id"></span></p>
+            <p>Asignar a:</p>
+            <select id="modal-select-repartidor"></select>
+            <div class="modal-actions">
+                <button id="btn-confirmar-asignacion">Confirmar</button>
+                <button id="btn-cancelar-asignacion" type="button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <script src="panel.js" type="module"></script>
+    <script src="logout.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+@startuml
+title Diagrama de Clases - Flash 24/7
+
+class Cliente {
+  <<Entity>>
+  +id_cliente: String
+  +nombre: String
+  +telefono: String
+}
+
+class Operador {
+  <<Entity>>
+  +id_operador: String
+  +nombre: String
+}
+
+class Repartidor {
+  <<Entity>>
+  +id_repartidor: String
+  +nombre: String
+  +estado: String
+  +vehiculo: String
+}
+
+class Envio {
+  <<Entity>>
+  +id_envio: String
+  +estado: String
+  +direccionOrigen: String
+  +direccionDestino: String
+  +fechaSolicitud: Timestamp
+  +id_cliente_fk: String
+  +id_repartidor_fk: String
+}
+
+class GestorDeEnvios {
+  <<Control>>
+  +solicitarEnvio(datos): Promise
+}
+
+class GestorDeAsignaciones {
+  <<Control>>
+  +asignarEnvio(idEnvio, idRepartidor): Promise
+}
+
+class GestorDeEntregas {
+  <<Control>>
+  +actualizarEstado(idEnvio, nuevoEstado): Promise
+}
+
+
+' --- Relaciones ---
+Cliente "1" -- "0..*" Envio : solicita
+Operador "1" -- "0..*" Envio : gestiona
+Repartidor "1" -- "0..*" Envio : realiza
+
+GestorDeEnvios ..> Envio : <<crea>>
+GestorDeAsignaciones ..> Envio : <<modifica>>
+GestorDeAsignaciones ..> Repartidor : <<consulta>>
+GestorDeEntregas ..> Envio : <<modifica>>
+@enduml

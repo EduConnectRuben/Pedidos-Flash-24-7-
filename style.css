@@ -1,0 +1,286 @@
+/* ================================================================= */
+/* --- PALETA DE COLORES Y VARIABLES GLOBALES (¡NUEVO!) --- */
+/* ================================================================= */
+:root {
+    --color-primario-azul: #0056b3;
+    --color-acento-naranja: #ff6600;
+    --color-acento-naranja-hover: #e65c00;
+    --color-fondo: #f4f7f6;
+    --color-superficie: #ffffff;
+    --color-texto-principal: #333;
+    --color-texto-secundario: #555;
+    --color-borde-suave: #e8e8e8;
+    --color-exito: #27ae60;
+    --color-error: #e74c3c;
+    --gradiente-naranja: linear-gradient(45deg, #ff8c00, #ff6600);
+    --sombra-profesional: 0 10px 30px rgba(0, 0, 0, 0.07);
+}
+
+/* ================================================================= */
+/* --- ESTILOS GENERALES Y PROFESIONALES (MEJORADO) --- */
+/* ================================================================= */
+/* Localiza esta parte en tu style.css */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    
+    /* --- ¡NUEVO! FONDO DEGRADADO VIBRANTE Y SÓLIDO --- */
+    background-color: var(--color-primario-azul); /* Color de respaldo */
+    background-image: linear-gradient(90deg, var(--color-primario-azul) 0%, var(--color-acento-naranja) 100%);
+    background-size: cover; /* Asegura que el degradado cubra todo */
+    background-attachment: fixed; /* El fondo no se mueve al hacer scroll */
+
+    color: var(--color-texto-principal);
+    display: flex;
+    justify-content: center;
+    align-items: center; /* ¡Cambiado! Centra el contenido verticalmente */
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: var(--color-superficie);
+    padding: 20px ;
+    margin: auto;
+    border-radius: 16px; /* Bordes más suaves */
+    box-shadow: var(--sombra-profesional);
+    border: 1px solid var(--color-borde-suave);
+    width: 100%;
+    max-width: 600px;
+    position: relative; 
+}
+
+header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #f0f0f0; padding-bottom: 25px; }
+header h1 { color: var(--color-primario-azul); font-size: 28px; font-weight: 700; }
+.logo { width: 90px; margin-bottom: 15px; }
+.hidden { display: none !important; }
+
+/* ================================================================= */
+/* --- ESTILOS PARA FORMULARIOS (MEJORADO) --- */
+/* ================================================================= */
+form h2 { text-align: center; color: var(--color-texto-principal); margin-bottom: 25px; font-weight: 600; }
+form label { margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--color-texto-secundario); }
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    padding: 14px 18px; /* Más espaciado interno */
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+form input:focus {
+    outline: none;
+    border-color: var(--color-primario-azul);
+    box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.15); /* Efecto de foco más notable */
+}
+
+/* ================================================================= */
+/* --- ¡NUEVO! ESTILOS DE BOTONES REUTILIZABLES --- */
+/* ================================================================= */
+
+/* --- Estilo Base Común para Todos los Botones --- */
+.btn {
+    display: inline-block; /* Permite que los <a> se comporten como botones */
+    width: 100%;
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none; /* Quita el subrayado de los enlaces */
+    border: 2px solid transparent; /* Borde base para transiciones suaves */
+    transition: transform 0.2s ease-out, box-shadow 0.3s ease, background-color 0.3s, color 0.3s;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+}
+
+/* --- Botón Primario (Naranja Sólido) --- */
+.btn-primario {
+    background-image: var(--gradiente-naranja);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+}
+
+.btn-primario:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 102, 0, 0.4);
+}
+
+/* --- Botón Secundario (Contorno Naranja - MI SUGERENCIA) --- */
+.btn-secundario {
+    background-color: transparent;
+    border-color: var(--color-acento-naranja);
+    color: var(--color-acento-naranja);
+}
+
+.btn-secundario:hover {
+    background-color: var(--color-acento-naranja);
+    color: white;
+    transform: translateY(-2px);
+}
+
+
+#confirmacion { text-align: center; padding: 20px; background-color: #e8f5e9; color: #2e7d32; border-radius: 8px; margin-top: 20px; }
+.auth-toggle { text-align: center; margin-top: 20px; font-size: 14px; }
+.auth-toggle a { color: var(--color-primario-azul); font-weight: bold; text-decoration: none; }
+.auth-toggle a:hover { text-decoration: underline; }
+
+/* ================================================================= */
+/* --- ESTILOS PARA PANELES Y TARJETAS (MEJORADO) --- */
+/* ================================================================= */
+section { border: none; padding: 0; }
+
+.envio-card, .repartidor-card {
+    background-color: #f9fafb;
+    border: 1px solid var(--color-borde-suave);
+    border-left: 5px solid var(--color-primario-azul); /* Acento de color */
+    padding: 18px 25px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.3s ease, border-left-color 0.3s ease;
+}
+
+.envio-card:hover {
+    border-left-color: var(--color-acento-naranja); /* El acento cambia al pasar el mouse */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.envio-card button {
+    background-color: var(--color-acento-naranja);
+    color: white;
+    font-size: 14px;
+    padding: 8px 15px;
+    flex-shrink: 0;
+    margin-left: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.envio-card button:hover {
+    background-color: var(--color-acento-naranja-hover);
+    transform: scale(1.05); /* Efecto de crecimiento sutil */
+}
+
+/* ================================================================= */
+/* --- BOTONES GENERALES (Logout, Nuevo Envío, etc.) --- */
+/* ================================================================= */
+.btn-logout {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    background-color: var(--color-error);
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn-logout:hover { background-color: #c0392b; }
+
+.btn-nuevo-envio {
+    background-color: var(--color-exito);
+    margin-top: 15px;
+}
+.btn-nuevo-envio:hover { background-color: #229954; }
+
+/* ================================================================= */
+/* --- MODAL DE ASIGNACIÓN (panel.html) --- */
+/* ================================================================= */
+.modal-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 400px; }
+.modal-content h3 { margin-top: 0; color: var(--color-primario-azul); }
+.modal-content select { width: 100%; padding: 12px; margin-top: 10px; margin-bottom: 25px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.modal-actions button { font-size: 16px; font-weight: 600; padding: 10px 20px; color: white; border: none; }
+#btn-confirmar-asignacion { background-color: var(--color-acento-naranja); border-radius: 5px; }
+#btn-confirmar-asignacion:hover { background-color: var(--color-acento-naranja-hover); }
+#btn-cancelar-asignacion { background-color: #888; border-radius: 5px; }
+#btn-cancelar-asignacion:hover { background-color: #5f5e5e; }
+
+/* ================================================================= */
+/* --- ESTILOS PARA EL RASTREO VISUAL (MEJORADO) --- */
+/* ================================================================= */
+.rastreo-progreso {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 25px;
+    position: relative;
+    padding: 0 10px;
+}
+
+.rastreo-progreso::before {
+    content: '';
+    position: absolute;
+    top: 17px; /* A la mitad de la altura del círculo */
+    left: 15%;
+    right: 15%;
+    height: 4px;
+    background-color: #eee;
+    z-index: 1;
+}
+
+.rastreo-paso {
+    color: #999;
+    z-index: 2;
+    background-color: var(--color-superficie); /* Corta la línea de fondo */
+    padding: 0 5px;
+    width: 60px; /* Ancho fijo para evitar que se muevan */
+}
+
+.rastreo-paso.completado {
+    color: var(--color-primario-azul);
+    font-weight: 600;
+}
+
+.rastreo-paso .circulo {
+    background-color: var(--color-superficie);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 auto 8px;
+    border: 3px solid #ccc;
+    transition: all 0.4s ease;
+}
+
+.rastreo-paso.completado .circulo {
+    background-color: var(--color-acento-naranja);
+    border-color: var(--color-primario-azul);
+}
+
+#btn-cerrar-rastreo { background-color: #888; border-radius: 5px; }
+#btn-cerrar-rastreo:hover { background-color: #636262; }
+
+.whatsapp-float { position: fixed; width: 55px; height: 55px; bottom: 20px; left: 20px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999; z-index: 100; display: flex; justify-content: center; align-items: center; transition: transform 0.3s; }
+.whatsapp-float:hover { transform: scale(1.1); }
+
+/* ================================================================= */
+/* --- ESTILOS PARA BOTONES DESHABILITADOS --- */
+/* ================================================================= */
+button:disabled, .btn-entregado {
+    background-color: #ccc !important;
+    background-image: none !important; /* Quita el gradiente si lo tiene */
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}

@@ -1,0 +1,24 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+
+actor "Cliente" as Cliente
+actor "Operador" as Operador
+actor "Repartidor" as Repartidor
+
+rectangle "Sistema Flash 24/7" {
+  usecase "Solicitar Envío" as UC1
+  usecase "Rastrear Envío" as UC2
+  usecase "Asignar Envío" as UC3
+  usecase "Actualizar Estado" as UC4
+  usecase "Gestionar Cuentas" as UC5
+}
+
+Cliente -- UC1
+Cliente -- UC2
+Operador -- UC3
+Repartidor -- UC4
+(UC5) .> (Cliente) : <<extends>>
+(UC5) .> (Operador) : <<extends>>
+(UC5) .> (Repartidor) : <<extends>>
+@enduml
