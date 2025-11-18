@@ -1,5 +1,5 @@
 // =================================================================
-// CÓDIGO DE PANEL.JS CON DEPURACIÓN (CONSOLE.LOG)
+// CÓDIGO FINAL, COMPLETO Y VERIFICADO DEL PANEL DEL OPERADOR
 // =================================================================
 import { db, auth } from './firebase-config.js';
 import { collection, query, where, onSnapshot, doc, updateDoc, getDoc, orderBy } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
@@ -19,8 +19,6 @@ const listaUsuariosDiv = document.getElementById('lista-usuarios');
 let repartidoresDisponibles = [];
 let envioIdParaAsignar = null;
 
-console.log("Panel.js cargado. Iniciando escuchas...");
-
 // --- Lógica de Autenticación ---
 onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -35,7 +33,6 @@ onAuthStateChanged(auth, async (user) => {
 // --- 1. Listener de Envíos Solicitados ---
 const qSolicitados = query(collection(db, "envios"), where("estado", "==", "Solicitado"));
 onSnapshot(qSolicitados, (snapshot) => {
-    // ... (código sin cambios)
     listaSolicitadosDiv.innerHTML = snapshot.empty ? '<p>No hay envíos pendientes.</p>' : '';
     snapshot.forEach(doc => {
         const envio = doc.data();
@@ -56,21 +53,13 @@ onSnapshot(qSolicitados, (snapshot) => {
 const qRepartidores = query(collection(db, "usuarios"), where("rol", "==", "repartidor"), where("estado", "==", "Disponible"));
 onSnapshot(qRepartidores, (snapshot) => {
     repartidoresDisponibles = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    
-    // ¡LÍNEA DE DEPURACIÓN #1!
-    console.log("REPARTIDORES ENCONTRADOS:", repartidoresDisponibles);
-
     listaRepartidoresDiv.innerHTML = repartidoresDisponibles.length > 0 ? '' : '<p>No hay repartidores disponibles.</p>';
     repartidoresDisponibles.forEach(rep => {
         listaRepartidoresDiv.innerHTML += `<div class="repartidor-card"><p><strong>${rep.nombre}</strong></p></div>`;
     });
-}, (error) => {
-    // ¡LÍNEA DE DEPURACIÓN #2!
-    console.error("ERROR AL OBTENER REPARTIDORES:", error);
 });
 
 // --- 3. Listener para la Lista de Todos los Usuarios ---
-// ... (código sin cambios)
 const qUsuarios = query(collection(db, "usuarios"), orderBy("nombre"));
 onSnapshot(qUsuarios, (snapshot) => {
     if (!listaUsuariosDiv) return;
@@ -100,49 +89,99 @@ onSnapshot(qUsuarios, (snapshot) => {
 });
 
 // ===============================================================
-// LISTENER DE CLICS UNIFICADO Y CORREGIDO
+// LISTENER DE CLICS PARA BOTONES DINÁMICOS
 // ===============================================================
 document.addEventListener('click', async (e) => {
     const target = e.target;
 
     // Abrir el modal de asignación
     if (target.classList.contains('btn-asignar')) {
-        // ¡LÍNEA DE DEPURACIÓN #3!
-        console.log("Botón 'Asignar' presionado. Verificando repartidores...");
-        console.log("Lista actual de repartidores disponibles:", repartidoresDisponibles);
-
-        if (repartidoresDisponibles.length === 0) {
-            Swal.fire('Atención', 'No hay repartidores disponibles en este momento para asignar el envío.', 'warning');
-            return;
-        }
-
         envioIdParaAsignar = target.dataset.id;
         const cardDiv = target.closest('.envio-card');
         const pPedido = cardDiv.querySelector('p:first-child');
         modalEnvioIdSpan.textContent = pPedido.textContent.replace('Pedido: ', '');
 
         modalSelectRepartidor.innerHTML = '';
-        modalSelectRepartidor.innerHTML = '<option value="">-- Selecciona un repartidor --</option>';
-        repartidoresDisponibles.forEach(r => modalSelectRepartidor.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
-        
+        if (repartidoresDisponibles.length > 0) {
+            modalSelectRepartidor.innerHTML = '<option value="">-- Selecciona un repartidor --</option>';
+            repartidoresDisponibles.forEach(r => modalSelectRepartidor.innerHTML += `<option value="${r.id}">${r.nombre}</option>`);
+        } else {
+            modalSelectRepartidor.innerHTML = '<option value="">No hay repartidores disponibles</option>';
+        }
         modalAsignacion.classList.remove('hidden');
     }
 
-    // Lógica para Cambiar Rol y Estado
-    // ... (código sin cambios)
+    // Lógica para Cambiar Rol
     if (target.classList.contains('btn-cambiar-rol')) {
-        // ...
+        const userId = target.dataset.id;
+        const currentRole = target.dataset.rol;
+        const { value: newRole } = await Swal.fire({
+            title: 'Selecciona el nuevo rol',
+            input: 'select',
+            inputOptions: { cliente: 'Cliente', repartidor: 'Repartidor', operador: 'Operador' },
+            inputValue: currentRole,
+            showCancelButton: true
+        });
+        if (newRole && newRole !== currentRole) {
+            await updateDoc(doc(db, "usuarios", userId), { rol: newRole });
+            Swal.fire('¡Éxito!', 'El rol ha sido actualizado.', 'success');
+        }
     }
+
+    // Lógica para Cambiar Estado
     if (target.classList.contains('btn-cambiar-estado')) {
-        // ...
+        const userId = target.dataset.id;
+        const currentState = target.dataset.estado;
+        const newState = currentState === 'Disponible' ? 'Ocupado' : 'Disponible';
+        const result = await Swal.fire({
+            title: '¿Confirmar cambio?',
+            text: `Cambiar estado a "${newState}".`,
+            icon: 'warning',
+            showCancelButton: true
+        });
+        if (result.isConfirmed) {
+            await updateDoc(doc(db, "usuarios", userId), { estado: newState });
+            Swal.fire('¡Actualizado!', `El estado es ahora "${newState}".`, 'success');
+        }
     }
 });
 
-// --- Lógica de los botones DENTRO del modal ---
-// ... (código sin cambios)
+// ===============================================================
+// ¡CORRECCIÓN FINAL! LISTENERS PARA LOS BOTONES ESTÁTICOS DEL MODAL
+// ===============================================================
 btnCancelarAsignacion.addEventListener('click', () => {
     modalAsignacion.classList.add('hidden');
 });
+
 btnConfirmarAsignacion.addEventListener('click', async () => {
-    // ...
+    const repartidorId = modalSelectRepartidor.value;
+    
+    if (!repartidorId) { // Solo necesitamos verificar que se haya seleccionado un repartidor
+        Swal.fire('Atención', 'Por favor, selecciona un repartidor.', 'warning');
+        return;
+    }
+    
+    // Deshabilitamos el botón para evitar dobles clics
+    btnConfirmarAsignacion.disabled = true;
+
+    try {
+        const envioRef = doc(db, "envios", envioIdParaAsignar);
+        const repartidorRef = doc(db, "usuarios", repartidorId);
+        
+        // Actualizamos ambos documentos en la base de datos
+        await updateDoc(envioRef, { estado: "Asignado", id_repartidor_fk: repartidorId });
+        await updateDoc(repartidorRef, { estado: "Ocupado" });
+        
+        Swal.fire('¡Éxito!', 'El envío ha sido asignado correctamente.', 'success');
+        
+        // Cerramos el modal y reseteamos el estado
+        modalAsignacion.classList.add('hidden');
+        envioIdParaAsignar = null;
+    } catch (error) {
+        console.error("Error al confirmar la asignación:", error);
+        Swal.fire('Error', 'Hubo un problema al asignar el envío. Revisa la consola para más detalles.', 'error');
+    } finally {
+        // Volvemos a habilitar el botón, tanto si tuvo éxito como si falló
+        btnConfirmarAsignacion.disabled = false;
+    }
 });
