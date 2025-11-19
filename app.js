@@ -1,9 +1,8 @@
 // =================================================================
 // CÓDIGO DEL PORTAL PRINCIPAL (ROUTER Y PÁGINA DE ATERRIZAJE)
-// ¡CORREGIDO para que el rastreo público funcione con el ID personalizado!
+// ¡CORREGIDO para incluir la redirección del rol de Administrador!
 // =================================================================
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-auth.js";
-// ¡IMPORTANTE! Añadimos 'collection', 'query' y 'where' para la nueva búsqueda
 import { collection, query, where, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js";
 import { db, auth } from './firebase-config.js'; 
 
@@ -12,7 +11,7 @@ let unsubscribeRastreo = null;
 
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        // --- CASO 1: USUARIO LOGUEADO (SIN CAMBIOS) ---
+        // --- CASO 1: USUARIO LOGUEADO (¡LÓGICA ACTUALIZADA!) ---
         portalMain.innerHTML = `<p style="text-align: center; font-size: 1.2em;">Sesión encontrada. Redirigiendo a tu panel...</p>`;
         
         const userDocRef = doc(db, "usuarios", user.uid);
@@ -20,15 +19,20 @@ onAuthStateChanged(auth, async (user) => {
 
         if (docSnap.exists()) {
             const rol = docSnap.data().rol;
+            
+            // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
+            // Añadimos la condición para el rol 'admin'
             if (rol === 'cliente') window.location.href = 'cliente.html';
             else if (rol === 'operador') window.location.href = 'panel.html';
             else if (rol === 'repartidor') window.location.href = 'repartidor.html';
+            else if (rol === 'admin') window.location.href = 'admin.html'; // <-- LÍNEA AÑADIDA
             else portalMain.innerHTML = `<p style="color: red;">Error: Rol desconocido.</p>`;
+
         } else {
              portalMain.innerHTML = `<p style="color: red;">Error: No se encontró tu registro de usuario.</p>`;
         }
     } else {
-        // --- CASO 2: NO HAY SESIÓN ACTIVA (SIN CAMBIOS EN EL HTML) ---
+        // --- CASO 2: NO HAY SESIÓN ACTIVA (SIN CAMBIOS) ---
         portalMain.innerHTML = `
             <div style="text-align: center; margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 30px;">
                 <h2 style="font-size: 1.5em; color: var(--color-texto-principal);">Accede a tu Cuenta</h2>
@@ -47,7 +51,7 @@ onAuthStateChanged(auth, async (user) => {
             </div>
         `;
 
-        // --- LÓGICA DEL FORMULARIO DE RASTREO (¡COMPLETAMENTE CORREGIDA!) ---
+        // --- LÓGICA DEL FORMULARIO DE RASTREO (SIN CAMBIOS) ---
         const formRastreo = document.getElementById('form-rastreo');
         const resultadoDiv = document.getElementById('resultado-rastreo');
 
@@ -59,15 +63,10 @@ onAuthStateChanged(auth, async (user) => {
 
             resultadoDiv.innerHTML = `<p>Buscando envío en tiempo real...</p>`;
             
-            // --- ¡EL CAMBIO MÁS IMPORTANTE ESTÁ AQUÍ! ---
-            // Antes usábamos doc(), ahora usamos query() para buscar por el campo 'id_pedido_personalizado'.
             const q = query(collection(db, "envios"), where("id_pedido_personalizado", "==", envioId));
 
-            // La escucha ahora es sobre la consulta 'q'
             unsubscribeRastreo = onSnapshot(q, (snapshot) => {
-                // El resultado de una consulta es un 'snapshot' que puede tener varios documentos
                 if (!snapshot.empty) {
-                    // Como el ID debe ser único, tomamos el primer (y único) resultado.
                     const docSnap = snapshot.docs[0]; 
                     const envio = docSnap.data();
                     const estados = ["Solicitado", "Asignado", "En Camino", "Entregado"];

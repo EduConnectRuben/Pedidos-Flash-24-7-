@@ -3,8 +3,8 @@ flash-24-7-web/
 ├── login.html
 ├── cliente.html
 ├── panel.html
-├── repartidor.html  <-- NUEVO
-├── rastreo.html
+├── repartidor.html
+├── admin.html       <-- NUEVO
 ├── style.css
 ├── app.js
 ├── auth.js
@@ -12,5 +12,6 @@ flash-24-7-web/
 ├── logout.js
 ├── cliente.js
 ├── panel.js
-├── repartidor.js    <-- NUEVO
-└── rastreo.js
+├── repartidor.js
+├── admin.js         <-- NUEVO
+└── firebase-config.js

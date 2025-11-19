@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash 24/7 - Panel de Administración</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- El auth-guard protege esta página para que solo usuarios logueados accedan -->
+    <script src="auth-guard.js" type="module"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="/images/flash.png" alt="Logo Flash 24/7" class="logo">
+            <h1>Panel de Administración</h1>
+            <p><strong>Administrador:</strong> <span id="nombre-admin">Cargando...</span></p>
+            <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
+        </header>
+
+        <main>
+            <!-- ======================================================= -->
+            <!-- SECCIÓN PRINCIPAL: ADMINISTRACIÓN DE USUARIOS -->
+            <!-- ======================================================= -->
+            <section id="admin-usuarios">
+                <h2>Gestión de Todos los Usuarios</h2>
+                <div id="lista-usuarios">
+                    <p>Cargando lista de usuarios...</p>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- SECCIÓN SECUNDARIA: HISTORIAL COMPLETO DE ENVÍOS -->
+            <!-- ======================================================= -->
+            <section id="historial-completo" style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 30px;">
+                <h2>Historial Global de Envíos</h2>
+                <div id="lista-envios">
+                    <p>Cargando historial de envíos...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts que dan vida a la página -->
+    <script src="admin.js" type="module"></script>
+    <script src="logout.js" type="module"></script>
+</body>
+</html>

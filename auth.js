@@ -1,5 +1,5 @@
 // =================================================================
-// CÓDIGO DE AUTENTICACIÓN - VERSIÓN FINAL CON SWEETALERT2
+// CÓDIGO DE AUTENTICACIÓN - VERSIÓN FINAL CON ROL DE ADMIN
 // =================================================================
 
 // Importamos los servicios YA INICIALIZADOS desde nuestro archivo central
@@ -73,6 +73,7 @@ formLogin.addEventListener('submit', async (e) => {
             if (rol === 'cliente') window.location.href = 'cliente.html';
             else if (rol === 'operador') window.location.href = 'panel.html';
             else if (rol === 'repartidor') window.location.href = 'repartidor.html';
+            else if (rol === 'admin') window.location.href = 'admin.html'; // <-- ¡LÍNEA AÑADIDA!
             else throw new Error("Tu usuario tiene un rol desconocido.");
             
         } else {
